@@ -1,8 +1,12 @@
 package com.example.demo;
 
 import java.sql.*;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class DBManager {
     final static String URL = "jdbc:mysql://localhost:3306/javadarbas";
@@ -123,7 +127,6 @@ public class DBManager {
             }
             return klientuSarasas;
         }
-
     }
 
     public Klientas gautiKlientaPagalId(int id) throws SQLException {
@@ -183,6 +186,64 @@ public class DBManager {
             preparedStatement.setInt(1,id);
             preparedStatement.executeUpdate();
         }
+    }
+    public List<Nuoma> visasNuomosSarasas() throws SQLException {
+        SQLconnect();
+        final String sql = "SELECT * FROM nuoma";
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<Nuoma> nuomosSarasas = new ArrayList<>();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int autoId = resultSet.getInt("auto_id");
+                int klientasId = resultSet.getInt("kliento_id");
+                LocalDateTime nuomosPradzia = resultSet.getTimestamp("nuomos_pradzia").toLocalDateTime();
+                LocalDateTime nuomosPabaiga = resultSet.getTimestamp("nuomos_Pabaiga").toLocalDateTime();
+                nuomosSarasas.add(new Nuoma(id, autoId, klientasId, nuomosPradzia, nuomosPabaiga));
+
+            }
+            return nuomosSarasas;
+        }
+    }
+    public void sukurtiNaujaNuomosOperacija(int autoId, int klientasId, Date nuomosPradzia) throws SQLException {
+        SQLconnect();
+        final String sql = "INSERT INTO nuoma (auto_id, kliento_id, nuomos_pradzia) VALUES (?, ?, ?)";
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            LocalDateTime localDateTime = LocalDateTime.now();
+            LocalDate localDate = localDateTime.toLocalDate();
+            Date sqlDate = Date.valueOf(localDate);
+
+            preparedStatement.setInt(1, autoId);
+            preparedStatement.setInt(2, klientasId);
+            preparedStatement.setDate(3, sqlDate);
+            preparedStatement.executeUpdate();
+        }
+    }
+    public void pridetiNuomaiGrazinimoData(int id, Date nuomosPabaiga) throws SQLException {
+        SQLconnect();
+        final String sql = "UPDATE nuoma SET nuomos_pabaiga = ? WHERE id = ?";
+        try(Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(2, id);
+            preparedStatement.setDate(1, nuomosPabaiga);
+            preparedStatement.executeUpdate();
+        }
+    }
+    public void istrintiNuomaPagalId(int id) throws SQLException {
+        SQLconnect();
+        final String sql = "DELETE FROM nuoma WHERE id = ?";
+        try(Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)){
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        }
+
     }
 
 }

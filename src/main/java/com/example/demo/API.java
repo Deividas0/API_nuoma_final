@@ -3,6 +3,8 @@ package com.example.demo;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +72,34 @@ public class API {
         DBManager db = new DBManager();
         db.istrintiKlientaPagalId(id);
     }
-}
+    @GetMapping("/visasnuomossarasas")
+    public List<Nuoma> visasNuomosSarasas() throws SQLException {
+        DBManager db = new DBManager();
+        return db.visasNuomosSarasas();
+    }
+    @PostMapping("/naujanuomosoperacija")
+    public void sukurtiNaujaNuomosOperacija(@RequestBody Nuoma n) throws SQLException {
+        DBManager db = new DBManager();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = localDateTime.toLocalDate();
+        Date sqlDate = Date.valueOf(localDate);
+        db.sukurtiNaujaNuomosOperacija(n.getAutoId(), n.getKlientasId(), sqlDate);
+    }
+    @PutMapping("/pridetinuomaigrazinimodata")
+    public void pridetiNuomaiGrazinimoData(@RequestBody Nuoma n) throws SQLException {
+        DBManager db = new DBManager();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = localDateTime.toLocalDate();
+        Date sqlDate = Date.valueOf(localDate);
+        db.pridetiNuomaiGrazinimoData(n.getId(),sqlDate);
+    }
+    @DeleteMapping("/istrintinuomapagalid")
+        public void istrintiNuomaPagalId(int id) throws SQLException {
+            DBManager db = new DBManager();
+            db.istrintiNuomaPagalId(id);
+        }
+    }
+
 
 
 
