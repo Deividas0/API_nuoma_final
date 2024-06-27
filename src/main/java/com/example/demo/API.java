@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.mysql.cj.xdevapi.DbDoc;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
@@ -10,95 +11,124 @@ import java.util.Optional;
 
 @RestController
 public class API {
+    private final NuomaService nuomaService = new NuomaService();
+    private final KlientasService klientasService = new KlientasService();
+    private final AutoService autoService = new AutoService();
 
     @GetMapping("/visiauto")
     public List<Auto> autoSarasas() throws SQLException {
-        DBManager db = new DBManager();
-        return db.autoSarasas();
+        return autoService.autoSarasas();
     }
 
     @GetMapping("/autopagalid")
     public Auto autoPagalId(int id) throws SQLException {
-        DBManager db = new DBManager();
-        return db.autoPagalId(id);
+        return autoService.autoPagalId(id);
     }
 
     @PostMapping("/naujasauto")
     public Auto naujasAuto(@RequestBody Auto auto) throws SQLException {
-        DBManager db = new DBManager();
-        db.naujasAuto(auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
+        autoService.naujasAuto(auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
         return null;
     }
 
     @PutMapping("/atnaujintiautoinfopagalid")
     public Auto keiciamAutoInfo(@RequestBody Auto auto, Optional<Integer> id) throws SQLException {
-        DBManager db = new DBManager();
-        db.keiciamAutoInfo(auto.getId(), auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
+        autoService.keiciamAutoInfo(auto.getId(), auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
         return null;
     }
 
     @DeleteMapping("/pasalintiautopagalid")
     public void pasalintiAutoPagalId(int id) throws SQLException {
-        DBManager db = new DBManager();
-        db.pasalintiAutoPagalId(id);
+        autoService.pasalintiAutoPagalId(id);
     }
 
     @GetMapping("/gautivisusklientus")
     public List<Klientas> gautivisusklientus() throws SQLException {
-        DBManager db = new DBManager();
-        return db.gautivisusklientus();
+        return klientasService.gautivisusklientus();
     }
 
     @GetMapping("/gautiklientapagalid")
     public Klientas gautiKlientaPagalId(int id) throws SQLException {
-        DBManager db = new DBManager();
-        return db.gautiKlientaPagalId(id);
+        return klientasService.gautiKlientaPagalId(id);
     }
 
     @PostMapping("/sukurtinaujaklienta")
     public Klientas sukurtiNaujaKlienta(@RequestBody Klientas k) throws SQLException {
-        DBManager db = new DBManager();
-        db.sukurtiNaujaKlienta(k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
+        klientasService.sukurtiNaujaKlienta(k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
         return null;
     }
 
     @PutMapping ("/atnaujintiklientoinfopagalid")
     private void atnaujintiKlientoInformacija(@RequestBody Klientas k) throws SQLException {
-        DBManager db = new DBManager();
-        db.atnaujintiKlientoInformacija(k.getId(),k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
+        klientasService.atnaujintiKlientoInformacija(k.getId(),k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
     }
     @DeleteMapping("/istrintiklientapagalid")
     public void istrintiKlientaPagalId(int id) throws SQLException {
-        DBManager db = new DBManager();
-        db.istrintiKlientaPagalId(id);
+        klientasService.istrintiKlientaPagalId(id);
     }
     @GetMapping("/visasnuomossarasas")
     public List<Nuoma> visasNuomosSarasas() throws SQLException {
-        DBManager db = new DBManager();
-        return db.visasNuomosSarasas();
+        return nuomaService.visasNuomosSarasas();
     }
     @PostMapping("/naujanuomosoperacija")
     public void sukurtiNaujaNuomosOperacija(@RequestBody Nuoma n) throws SQLException {
-        DBManager db = new DBManager();
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalDate localDate = localDateTime.toLocalDate();
         Date sqlDate = Date.valueOf(localDate);
-        db.sukurtiNaujaNuomosOperacija(n.getAutoId(), n.getKlientasId(), sqlDate);
+        nuomaService.sukurtiNaujaNuomosOperacija(n.getAutoId(), n.getKlientasId(), sqlDate);
     }
     @PutMapping("/pridetinuomaigrazinimodata")
     public void pridetiNuomaiGrazinimoData(@RequestBody Nuoma n) throws SQLException {
-        DBManager db = new DBManager();
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalDate localDate = localDateTime.toLocalDate();
         Date sqlDate = Date.valueOf(localDate);
-        db.pridetiNuomaiGrazinimoData(n.getId(),sqlDate);
+        nuomaService.pridetiNuomaiGrazinimoData(n.getId(),sqlDate);
     }
     @DeleteMapping("/istrintinuomapagalid")
         public void istrintiNuomaPagalId(int id) throws SQLException {
-            DBManager db = new DBManager();
-            db.istrintiNuomaPagalId(id);
+            nuomaService.istrintiNuomaPagalId(id);
         }
+
+        // ------------------------------------  PAPILDOMI ENDPOINTAI -------------------------------
+
+    @GetMapping("/visilaisviauto")
+    public List<Auto> laisvuAutoSarasas() throws SQLException {
+        return autoService.laisvuAutoSarasas();
     }
+
+    @GetMapping("/visiautopagalgamintoja")
+    public List<Auto> visiAutoPagalGamintoja(String gamintojas2) throws SQLException {
+        return autoService.visiAutoPagalGamintoja(gamintojas2);
+    }
+    @GetMapping("/nuomapagalklientoid")
+    public List<Nuoma> nuomaPagalKlientoId(int klientoId) throws SQLException {
+        return nuomaService.nuomaPagalKlientoId(klientoId);
+    }
+
+    @GetMapping("/nuomadatosnuoiki")
+    public List<Nuoma> nuomaPagalDatasNuoIki(String nuomosPradzia2, String nuomuosPabaiga2) throws SQLException {
+        return nuomaService.nuomaPagalDatasNuoIki(nuomosPradzia2,nuomuosPabaiga2);
+    }
+    @GetMapping("/nuomaarauttolaisvaspagaldata")
+        public boolean nuomaArAutoLaisvasPagalData(int autoId2, String data) throws SQLException {
+        return nuomaService.nuomaArAutoLaisvasPagalData(autoId2,data);
+    }
+    @GetMapping("/gautivisusautopagalmetus")
+    public List<Auto> gautiVisusAutoPagalMetus(int x) throws SQLException {
+        return autoService.gautiVisusAutoPagalMetus(x);
+    }
+
+    @GetMapping("/klientaiturintysaktyvianuoma")
+    public List<Klientas> klientaiTurintysAktyviaNuoma() throws SQLException {
+        return klientasService.klientaiTurintysAktyviaNuoma();
+    }
+
+    @GetMapping("/isnomuotiautodaugiauneixkartu")
+    public List<Auto> isnomuotiAutoDaugiauNeiXKartu(int x) throws SQLException {
+        return autoService.isnomuotiAutoDaugiauNeiXKartu(x);
+    }
+
+}
 
 
 
