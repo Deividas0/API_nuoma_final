@@ -7,22 +7,22 @@ public class KlientasService {
 
     private final DBRepository dbRepository = new DBRepository();
 
-    public List<Klientas> gautivisusklientus() throws SQLException {
-        return dbRepository.gautivisusklientus();
+    public List<Klientas> clientList() throws SQLException {
+        return dbRepository.clientList();
     }
-    public Klientas gautiKlientaPagalId(int id) throws SQLException {
-        return dbRepository.gautiKlientaPagalId(id);
+    public Klientas clientById(int id) throws SQLException {
+        return dbRepository.clientById(id);
     }
-    public void sukurtiNaujaKlienta(String vardas, String pavarde, String email, String telNumeris) throws SQLException {
-        dbRepository.sukurtiNaujaKlienta(vardas, pavarde, email, telNumeris);
+    public void newClient(String vardas, String pavarde, String email, String telNumeris) throws SQLException {
+        dbRepository.newClient(vardas, pavarde, email, telNumeris);
     }
-    public void atnaujintiKlientoInformacija(int id, String vardas, String pavarde, String email, String telNumeris) throws SQLException {
-        dbRepository.atnaujintiKlientoInformacija(id, vardas, pavarde, email, telNumeris);
+    public void updateClientById(int id, String vardas, String pavarde, String email, String telNumeris) throws SQLException {
+        dbRepository.updateClientById(id, vardas, pavarde, email, telNumeris);
     }
-    public void istrintiKlientaPagalId(int id) throws SQLException {
-        dbRepository.istrintiKlientaPagalId(id);
+    public void deleteClientById(int id) throws SQLException {
+        dbRepository.deleteClientById(id);
     }
-    public List<Klientas> klientaiTurintysAktyviaNuoma() throws SQLException {
-        return dbRepository.klientaiTurintysAktyviaNuoma();
+    public List<Klientas> clientsWithActiveRents() throws SQLException {
+        return dbRepository.clientsWithActiveRents();
     }
 }

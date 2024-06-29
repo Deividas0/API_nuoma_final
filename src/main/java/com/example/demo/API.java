@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.mysql.cj.xdevapi.DbDoc;
+import jakarta.websocket.server.PathParam;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
@@ -11,122 +12,122 @@ import java.util.Optional;
 
 @RestController
 public class API {
-    private final NuomaService nuomaService = new NuomaService();
-    private final KlientasService klientasService = new KlientasService();
-    private final AutoService autoService = new AutoService();
+    //private final NuomaService nuomaService = new NuomaService();
+    //private final KlientasService klientasService = new KlientasService();
+    //private final AutoService autoService = new AutoService();
 
-    @GetMapping("/visiauto")
-    public List<Auto> autoSarasas() throws SQLException {
-        return autoService.autoSarasas();
-    }
+//    @GetMapping("/cars")   // Gauti visus auto.
+//    public List<Auto> carsList() throws SQLException {
+//        return autoService.carsList();
+//    }
 
-    @GetMapping("/autopagalid")
-    public Auto autoPagalId(int id) throws SQLException {
-        return autoService.autoPagalId(id);
-    }
+//    @GetMapping("/cars/{id}")   // Gauti auto pagal ID.
+//    public Auto carsById(@PathVariable int id) throws SQLException {
+//        return autoService.carsById(id);
+//    }
 
-    @PostMapping("/naujasauto")
-    public Auto naujasAuto(@RequestBody Auto auto) throws SQLException {
-        autoService.naujasAuto(auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
-        return null;
-    }
+//    @PostMapping("/cars")   // Pridėti nauja auto.
+//    public Auto newAuto(@RequestBody Auto auto) throws SQLException {
+//        autoService.newAuto(auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
+//        return null;
+//    }
 
-    @PutMapping("/atnaujintiautoinfopagalid")
-    public Auto keiciamAutoInfo(@RequestBody Auto auto, Optional<Integer> id) throws SQLException {
-        autoService.keiciamAutoInfo(auto.getId(), auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
-        return null;
-    }
+//    @PutMapping("/cars/{id}")   // Atnaujinti auto info pagal ID.
+//    public Auto updateCarById(@PathVariable int id, @RequestBody Auto auto) throws SQLException {
+//        autoService.updateCarById(auto.getId(), auto.getGamintojas(), auto.getModelis(), auto.getMetai(), auto.getUzimtumas());
+//        return null;
+//    }
 
-    @DeleteMapping("/pasalintiautopagalid")
-    public void pasalintiAutoPagalId(int id) throws SQLException {
-        autoService.pasalintiAutoPagalId(id);
-    }
+//    @DeleteMapping("/cars/{id}")   // Istrinti auto pagal ID.
+//    public void deleteCarById(@PathVariable int id) throws SQLException {
+//        autoService.deleteCarById(id);
+//    }
 
-    @GetMapping("/gautivisusklientus")
-    public List<Klientas> gautivisusklientus() throws SQLException {
-        return klientasService.gautivisusklientus();
-    }
+//    @GetMapping("/clients")   // Gauti visus klientus.
+//    public List<Klientas> clientList() throws SQLException {
+//        return klientasService.clientList();
+//    }
 
-    @GetMapping("/gautiklientapagalid")
-    public Klientas gautiKlientaPagalId(int id) throws SQLException {
-        return klientasService.gautiKlientaPagalId(id);
-    }
+//    @GetMapping("/clients/{id}")   // Gauti klienta pagal ID.
+//    public Klientas clientById(@PathVariable int id) throws SQLException {
+//        return klientasService.clientById(id);
+//    }
 
-    @PostMapping("/sukurtinaujaklienta")
-    public Klientas sukurtiNaujaKlienta(@RequestBody Klientas k) throws SQLException {
-        klientasService.sukurtiNaujaKlienta(k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
-        return null;
-    }
+//    @PostMapping("/clients")  // Sukurti nauja klienta.
+//    public Klientas newClient(@RequestBody Klientas k) throws SQLException {
+//        klientasService.newClient(k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
+//        return null;
+//    }
 
-    @PutMapping ("/atnaujintiklientoinfopagalid")
-    private void atnaujintiKlientoInformacija(@RequestBody Klientas k) throws SQLException {
-        klientasService.atnaujintiKlientoInformacija(k.getId(),k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
-    }
-    @DeleteMapping("/istrintiklientapagalid")
-    public void istrintiKlientaPagalId(int id) throws SQLException {
-        klientasService.istrintiKlientaPagalId(id);
-    }
-    @GetMapping("/visasnuomossarasas")
-    public List<Nuoma> visasNuomosSarasas() throws SQLException {
-        return nuomaService.visasNuomosSarasas();
-    }
-    @PostMapping("/naujanuomosoperacija")
-    public void sukurtiNaujaNuomosOperacija(@RequestBody Nuoma n) throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        LocalDate localDate = localDateTime.toLocalDate();
-        Date sqlDate = Date.valueOf(localDate);
-        nuomaService.sukurtiNaujaNuomosOperacija(n.getAutoId(), n.getKlientasId(), sqlDate);
-    }
-    @PutMapping("/pridetinuomaigrazinimodata")
-    public void pridetiNuomaiGrazinimoData(@RequestBody Nuoma n) throws SQLException {
-        LocalDateTime localDateTime = LocalDateTime.now();
-        LocalDate localDate = localDateTime.toLocalDate();
-        Date sqlDate = Date.valueOf(localDate);
-        nuomaService.pridetiNuomaiGrazinimoData(n.getId(),sqlDate);
-    }
-    @DeleteMapping("/istrintinuomapagalid")
-        public void istrintiNuomaPagalId(int id) throws SQLException {
-            nuomaService.istrintiNuomaPagalId(id);
-        }
+//    @PutMapping ("/clients/{id}")   // Atnaujinti kliento info pagal ID.
+//    private void updateClientById(@PathVariable int id, @RequestBody Klientas k) throws SQLException {
+//        klientasService.updateClientById(k.getId(),k.getVardas(), k.getPavarde(), k.getEmail(), k.getTelNumeris());
+//    }
+//    @DeleteMapping("/clients/{id}")   // Istrinti klienta pagal ID.
+//    public void deleteClientById(@PathVariable int id) throws SQLException {
+//        klientasService.deleteClientById(id);
+//    }
+//    @GetMapping("/rentals")   // Visas nuomos sarasas.
+//    public List<Nuoma> rentalsList() throws SQLException {
+//        return nuomaService.rentalsList();
+//    }
+//    @PostMapping("/rentals")   // Nauja nuomos registracija.
+//    public void newRental(@RequestBody Nuoma n) throws SQLException {
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        LocalDate localDate = localDateTime.toLocalDate();
+//        Date sqlDate = Date.valueOf(localDate);
+//        nuomaService.newRental(n.getAutoId(), n.getKlientasId(), sqlDate);
+//    }
+//    @PutMapping("/rentals/{id}")   // Prideti nuomai grazinimo data.
+//    public void rentalsAddReturnDateById(@PathVariable int id, @RequestBody Nuoma n) throws SQLException {
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        LocalDate localDate = localDateTime.toLocalDate();
+//        Date sqlDate = Date.valueOf(localDate);
+//        nuomaService.rentalsAddReturnDateById(n.getId(),sqlDate);
+//    }
+//    @DeleteMapping("/rentals/{id}")   // Istrinti nuoma pagal ID.
+//        public void removeRentalById(@PathVariable int id) throws SQLException {
+//            nuomaService.removeRentalById(id);
+//        }
 
         // ------------------------------------  PAPILDOMI ENDPOINTAI -------------------------------
 
-    @GetMapping("/visilaisviauto")
-    public List<Auto> laisvuAutoSarasas() throws SQLException {
-        return autoService.laisvuAutoSarasas();
-    }
+//    @GetMapping("/cars/available")   // Laisvi auto.
+//    public List<Auto> availableCars() throws SQLException {
+//        return autoService.availableCars();
+//    }
 
-    @GetMapping("/visiautopagalgamintoja")
-    public List<Auto> visiAutoPagalGamintoja(String gamintojas2) throws SQLException {
-        return autoService.visiAutoPagalGamintoja(gamintojas2);
-    }
-    @GetMapping("/nuomapagalklientoid")
-    public List<Nuoma> nuomaPagalKlientoId(int klientoId) throws SQLException {
-        return nuomaService.nuomaPagalKlientoId(klientoId);
-    }
+//    @GetMapping("/cars/{make}")   // Visi auto pagal gamintoja.
+//    public List<Auto> carsByMaker(@PathVariable String make) throws SQLException {
+//        return autoService.carsByMaker(make);
+//    }
+//    @GetMapping("/clients/{id}/rentals")  // Visos nuomos pagal kliento ID.
+//    public List<Nuoma> rentByClientId(@PathVariable int id) throws SQLException {
+//        return nuomaService.rentByClientId(id);
+//    }
 
-    @GetMapping("/nuomadatosnuoiki")
-    public List<Nuoma> nuomaPagalDatasNuoIki(String nuomosPradzia2, String nuomuosPabaiga2) throws SQLException {
-        return nuomaService.nuomaPagalDatasNuoIki(nuomosPradzia2,nuomuosPabaiga2);
-    }
-    @GetMapping("/nuomaarauttolaisvaspagaldata")
-        public boolean nuomaArAutoLaisvasPagalData(int autoId2, String data) throws SQLException {
-        return nuomaService.nuomaArAutoLaisvasPagalData(autoId2,data);
-    }
-    @GetMapping("/gautivisusautopagalmetus")
-    public List<Auto> gautiVisusAutoPagalMetus(int x) throws SQLException {
-        return autoService.gautiVisusAutoPagalMetus(x);
-    }
+//    @GetMapping("/rentals/period")  // Nuoma pagal datas (nuo-iki)
+//    public List<Nuoma> rentByDateFromTo(String nuomosPradzia2, String nuomuosPabaiga2) throws SQLException {
+//        return nuomaService.rentByDateFromTo(nuomosPradzia2,nuomuosPabaiga2);
+//    }
+//    @GetMapping("/cars/{id}/availability")   // Patikrinti ar auto laisvas pagal data.
+//        public boolean checkIfCarAvailableByDate(@PathVariable int id, String data) throws SQLException {
+//        return nuomaService.checkIfCarAvailableByDate(id,data);
+//    }
+//    @GetMapping("/cars/year/{year}")   // Gauti visus auto pagal metus.
+//    public List<Auto> allAutoByYear(@PathVariable int year) throws SQLException {
+//        return autoService.allAutoByYear(year);
+//    }
 
-    @GetMapping("/klientaiturintysaktyvianuoma")
-    public List<Klientas> klientaiTurintysAktyviaNuoma() throws SQLException {
-        return klientasService.klientaiTurintysAktyviaNuoma();
-    }
+//    @GetMapping("/clients/active-rentals")   // Gauti klientus su aktyviom nuomom.
+//    public List<Klientas> clientsWithActiveRents() throws SQLException {
+//        return klientasService.clientsWithActiveRents();
+//    }
 
-    @GetMapping("/isnomuotiautodaugiauneixkartu")
-    public List<Auto> isnomuotiAutoDaugiauNeiXKartu(int x) throws SQLException {
-        return autoService.isnomuotiAutoDaugiauNeiXKartu(x);
-    }
+//    @GetMapping("/cars/rented-more-than/{count}")   // Gauti visus auto isnomuotus daugiau nei X kartu.
+//    public List<Auto> carsRentedMoreThanXAmount(@PathVariable int count) throws SQLException {
+//        return autoService.carsRentedMoreThanXAmount(count);
+//    }
 
 }
 

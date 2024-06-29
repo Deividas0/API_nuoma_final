@@ -26,7 +26,7 @@ public class DBRepository {
         _connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
-    public List<Nuoma> visasNuomosSarasas() throws SQLException {
+    public List<Nuoma> rentalsList() throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM nuoma";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -46,7 +46,7 @@ public class DBRepository {
         }
     }
 
-    public void sukurtiNaujaNuomosOperacija(int autoId, int klientasId, Date nuomosPradzia) throws SQLException {
+    public void newRental(int autoId, int klientasId, Date nuomosPradzia) throws SQLException {
         SQLconnect();
         final String sql = "INSERT INTO nuoma (auto_id, kliento_id, nuomos_pradzia) VALUES (?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -63,7 +63,7 @@ public class DBRepository {
         }
     }
 
-    public void pridetiNuomaiGrazinimoData(int id, Date nuomosPabaiga) throws SQLException {
+    public void rentalsAddReturnDateById(int id, Date nuomosPabaiga) throws SQLException {
         SQLconnect();
         final String sql = "UPDATE nuoma SET nuomos_pabaiga = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -75,7 +75,7 @@ public class DBRepository {
         }
     }
 
-    public void istrintiNuomaPagalId(int id) throws SQLException {
+    public void removeRentalById(int id) throws SQLException {
         SQLconnect();
         final String sql = "DELETE FROM nuoma WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -86,7 +86,7 @@ public class DBRepository {
         }
     }
 
-    public List<Nuoma> nuomaPagalKlientoId(int klientoId) throws SQLException {
+    public List<Nuoma> rentByClientId(int klientoId) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM nuoma WHERE kliento_id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -109,7 +109,7 @@ public class DBRepository {
         }
     }
 
-    public List<Nuoma> nuomaPagalDatasNuoIki(String nuomosPradzia2, String nuomosPabaiga2) throws SQLException {
+    public List<Nuoma> rentByDateFromTo(String nuomosPradzia2, String nuomosPabaiga2) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM nuoma WHERE nuomos_pradzia >= ? AND nuomos_pabaiga <= ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -133,7 +133,7 @@ public class DBRepository {
         }
     }
 
-    public boolean nuomaArAutoLaisvasPagalData(int autoId2, String data) throws SQLException {
+    public boolean checkIfCarAvailableByDate(int autoId2, String data) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM nuoma WHERE auto_id = ? AND ? NOT BETWEEN nuomos_pradzia AND nuomos_pabaiga";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -149,7 +149,7 @@ public class DBRepository {
         }
     }
 
-    public List<Klientas> gautivisusklientus() throws SQLException {
+    public List<Klientas> clientList() throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM klientai";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -171,7 +171,7 @@ public class DBRepository {
         }
     }
 
-    public Klientas gautiKlientaPagalId(int id) throws SQLException {
+    public Klientas clientById(int id) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM klientai WHERE id = (?)";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -192,7 +192,7 @@ public class DBRepository {
         }
     }
 
-    public void sukurtiNaujaKlienta(String vardas, String pavarde, String email, String telNumeris) throws SQLException {
+    public void newClient(String vardas, String pavarde, String email, String telNumeris) throws SQLException {
         SQLconnect();
         final String sql = "INSERT INTO klientai (vardas, pavarde, el_pastas, tel_numeris) VALUES (?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -207,7 +207,7 @@ public class DBRepository {
 
     }
 
-    public void atnaujintiKlientoInformacija(int id, String vardas, String pavarde, String email, String telNumeris) throws SQLException {
+    public void updateClientById(int id, String vardas, String pavarde, String email, String telNumeris) throws SQLException {
         SQLconnect();
         final String sql = "UPDATE klientai SET vardas = ?, pavarde = ?, el_pastas = ?, tel_numeris = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -222,7 +222,7 @@ public class DBRepository {
         }
     }
 
-    public void istrintiKlientaPagalId(int id) throws SQLException {
+    public void deleteClientById(int id) throws SQLException {
         SQLconnect();
         final String sql = "DELETE FROM klientai WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -233,7 +233,7 @@ public class DBRepository {
         }
     }
 
-    public List<Klientas> klientaiTurintysAktyviaNuoma() throws SQLException {
+    public List<Klientas> clientsWithActiveRents() throws SQLException {
         SQLconnect();
         final String sql = """
                 SELECT DISTINCT k.id, k.vardas, k.pavarde, k.el_pastas, k.tel_numeris, n.nuomos_pradzia FROM nuoma n
@@ -258,7 +258,7 @@ public class DBRepository {
             return klientaiTurintysAktyviaNuoma;
         }
     }
-    public List<Auto> autoSarasas() throws SQLException {
+    public List<Auto> carsList() throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM auto";
         PreparedStatement preparedStatement = _connection.prepareStatement(sql);
@@ -276,7 +276,7 @@ public class DBRepository {
         }
         return autoSarasas;
     }
-    public Auto autoPagalId(int id) throws SQLException {
+    public Auto carsById(int id) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM auto WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -296,7 +296,7 @@ public class DBRepository {
             return null;
         }
     }
-    public void naujasAuto(String gamintojas, String modelis, int metai, boolean uzimtumas) throws SQLException {
+    public void newAuto(String gamintojas, String modelis, int metai, boolean uzimtumas) throws SQLException {
         SQLconnect();
         final String sql = "INSERT INTO auto (gamintojas,modelis,metai,uzimtumas) VALUES (?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -309,7 +309,7 @@ public class DBRepository {
             preparedStatement.execute();
         }
     }
-    public void keiciamAutoInfo(int id, String gamintojas, String modelis, int metai, boolean uzimtumas) throws SQLException {
+    public void updateCarById(int id, String gamintojas, String modelis, int metai, boolean uzimtumas) throws SQLException {
         SQLconnect();
         final String sql = "UPDATE auto SET gamintojas = ?, modelis = ?, metai = ?, uzimtumas = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -320,10 +320,10 @@ public class DBRepository {
             preparedStatement.setInt(3, metai);
             preparedStatement.setBoolean(4, uzimtumas);
             preparedStatement.setInt(5, id);
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
         }
     }
-    public void pasalintiAutoPagalId(int id) throws SQLException {
+    public void deleteCarById(int id) throws SQLException {
         SQLconnect();
         final String sql = "DELETE FROM auto WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -334,7 +334,7 @@ public class DBRepository {
 
         }
     }
-    public List<Auto> laisvuAutoSarasas() throws SQLException {
+    public List<Auto> availableCars() throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM auto WHERE uzimtumas = 1";
         PreparedStatement preparedStatement = _connection.prepareStatement(sql);
@@ -353,7 +353,7 @@ public class DBRepository {
         }
         return laisvuAutoSarasas;
     }
-    public List<Auto> visiAutoPagalGamintoja(String gamintojas2) throws SQLException {
+    public List<Auto> carsByMaker(String gamintojas2) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM auto WHERE gamintojas = ?";
         PreparedStatement preparedStatement = _connection.prepareStatement(sql);
@@ -373,7 +373,7 @@ public class DBRepository {
         }
         return visiAutoPagalGamintoja;
     }
-    public List<Auto> gautiVisusAutoPagalMetus(int x) throws SQLException {
+    public List<Auto> allAutoByYear(int x) throws SQLException {
         SQLconnect();
         final String sql = "SELECT * FROM auto WHERE metai = ?";
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD)) {
@@ -395,7 +395,7 @@ public class DBRepository {
             return visiAutoPagalMetus;
         }
     }
-    public List<Auto> isnomuotiAutoDaugiauNeiXKartu(int x) throws SQLException {
+    public List<Auto> carsRentedMoreThanXAmount(int x) throws SQLException {
         SQLconnect();
         final String sql = """
                 SELECT a.id, a.gamintojas, a.modelis, a.metai, a.uzimtumas
